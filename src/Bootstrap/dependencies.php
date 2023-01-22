@@ -23,10 +23,7 @@ $container['logger'] = function ($c) {
 };
 
 $container['view'] = function ($container): Twig {
-    $view = new Twig( dirname(__DIR__, 2) . '/resources/view/templates',
-    [
-        'cache' => false
-    ]);
+    $view = new Twig( $container->get('settings')['twig']['template_path'], $container->get('settings')['twig']['settings']);
 
     $view->addExtension(new TwigExtension(
         $container->router,

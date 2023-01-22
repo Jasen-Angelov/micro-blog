@@ -5,14 +5,18 @@ return [
         'determineRouteBeforeAppMiddleware' => true,
 
         // Renderer settings
-        'renderer' => [
-            'template_path' => __DIR__ . '/../templates/',
+        'twig' => [
+            'template_path' => dirname(__DIR__, 2) . '/resources/view/templates',
+            'settings' => [
+                'cache' => false,
+                'debug' => true,
+            ],
         ],
 
         // Monolog settings
         'logger' => [
             'name' => 'slim-app',
-            'path' => __DIR__ . '/../logs/app.log',
+            'path' => APP_ROOT . '/logs/app.log',
         ],
 
         'db' => [
@@ -24,6 +28,6 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
-        ]
+        ],
     ],
 ];
