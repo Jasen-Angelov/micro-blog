@@ -2,9 +2,11 @@
 
 namespace App\Helpers;
 
+use App\Interfaces\ErrorBag;
 use App\Interfaces\FormValidator;
+use App\Interfaces\ImageValidator;
 
-class InputValidator implements FormValidator
+class InputValidator implements FormValidator, ErrorBag, ImageValidator
 {
     /**
      * Regex patterns for validating input
@@ -148,7 +150,7 @@ class InputValidator implements FormValidator
      * @param int $length
      * @return InputValidator
      */
-    public function min(int $length): InputValidator
+    public function min_length(int $length): InputValidator
     {
         $count = $this->get_count_value($this->input_value);
 
@@ -171,7 +173,7 @@ class InputValidator implements FormValidator
      * @param $length
      * @return InputValidator
      */
-    public function max($length):InputValidator
+    public function max_length($length):InputValidator
     {
         $count = $this->get_count_value($this->input_value);
 
@@ -191,12 +193,13 @@ class InputValidator implements FormValidator
     /**
      * Check if input is equal to $value
      *
-     * @param mixed $value
+     * @param mixed $input
+     * @param mixed $evaluator
      * @return InputValidator
      */
-    public function equal(mixed $value): InputValidator
+    public function is_equal(mixed $input, mixed $evaluator): InputValidator
     {
-        if ($this->input_value !== $value) {
+        if ($input !== $evaluator) {
             $this->errors[] = "$this->input_name input is not equal to the compared data!";
         }
 
@@ -262,12 +265,12 @@ class InputValidator implements FormValidator
     /**
      * Check if input value is integer.
      *
-     * @param mixed $value
+     * @param mixed $data
      * @return InputValidator
      */
-    public function is_int(mixed $value): InputValidator
+    public function is_int(mixed $data): InputValidator
     {
-        if (false === filter_var($value, FILTER_VALIDATE_INT)){
+        if (false === filter_var($data, FILTER_VALIDATE_INT)){
             $this->errors[] = "$this->input_name input data is not an integer!";
         }
 
@@ -277,12 +280,12 @@ class InputValidator implements FormValidator
     /**
      * Check if input value is float.
      *
-     * @param mixed $value
+     * @param mixed $data
      * @return InputValidator
      */
-    public function is_float(mixed $value): InputValidator
+    public function is_float(mixed $data): InputValidator
     {
-        if (false === filter_var($value, FILTER_VALIDATE_FLOAT)){
+        if (false === filter_var($data, FILTER_VALIDATE_FLOAT)){
             $this->errors[] = "$this->input_name input data is not a float!";
         }
 
@@ -292,12 +295,12 @@ class InputValidator implements FormValidator
     /**
      * Validate if input value is a valid URL.
      *
-     * @param string $value
+     * @param string $url
      * @return InputValidator
      */
-    public function is_url($value): InputValidator
+    public function is_url(string $url): InputValidator
     {
-        if (false === filter_var($value, FILTER_VALIDATE_URL)){
+        if (false === filter_var($url, FILTER_VALIDATE_URL)){
             $this->errors[] = "$this->input_name input data is not a valid URL!";
         }
 
@@ -307,12 +310,12 @@ class InputValidator implements FormValidator
     /**
      * Validate if value is boolean.
      *
-     * @param mixed $value
+     * @param string|bool $data
      * @return InputValidator
      */
-    public function is_bool(mixed $value): InputValidator
+    public function is_bool(string|bool $data): InputValidator
     {
-        if (false === filter_var($value, FILTER_VALIDATE_BOOLEAN)){
+        if (false === filter_var($data, FILTER_VALIDATE_BOOLEAN)){
             $this->errors[] = "$this->input_name input data is not a boolean!";
         }
 
