@@ -1,11 +1,26 @@
 <?php
-namespace App\Controller;
+namespace App\Controllers;
 
+use App\Interfaces\Controller;
+use App\Interfaces\Validator;
+use Monolog\Logger;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Views\Twig;
 
-abstract class BaseController
+abstract class BaseController implements Controller
 {
+
+    /**
+     * This function will add the App to the controller.
+     *
+     * @param Twig $view
+     * @param Logger $logger
+     * @param Validator $validator
+     */
+    public function __construct(protected Twig $view, protected Logger $logger, protected Validator $validator)
+    {
+    }
     /**
      * Magic function that allows us to call the class as closure.
      *
@@ -16,18 +31,13 @@ abstract class BaseController
      */
     public function __invoke(Request $request, Response $response, array $args = []): Response
     {
-      switch ($request->getMethod()) {
-          case 'GET':
-              return $this->get($request, $response, $args);
-          case 'POST':
-              return $this->post($request, $response);
-          case 'PUT':
-              return $this->put($request, $response, $args);
-          case 'DELETE':
-              return $this->delete($request, $response, $args);
-          default:
-              return $response->withStatus(405);
-      }
+        return match ($request->getMethod()) {
+            'GET'    => $this->get($request, $response, $args),
+            'POST'   => $this->post($request, $response),
+            'PUT'    => $this->put($request, $response, $args),
+            'DELETE' => $this->delete($request, $response, $args),
+            default  => $response->withStatus(405),
+        };
     }
 
     /**
