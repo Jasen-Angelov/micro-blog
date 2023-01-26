@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface FormValidator extends Validator
 {
-   public function is_email(string $email): FormValidator;
+   public function is_email(): FormValidator;
 
     public function is_required(): FormValidator;
 
@@ -12,14 +12,14 @@ interface FormValidator extends Validator
 
     public function max_length(int $length): FormValidator;
 
-    public function is_equal(mixed $input, mixed $evaluator): FormValidator;
+    public function is_equal(mixed $evaluator): FormValidator;
 
-    public function is_url(string $url): FormValidator;
+    public function is_url(): FormValidator;
 
-    public function is_bool(string|bool $data): FormValidator;
+    public function is_bool(): FormValidator;
 
-    public function is_int(string|int $data): FormValidator;
+    public function is_int(): FormValidator;
 
-    public function is_float(string|float $data): FormValidator;
+    public function is_float(): FormValidator;
 
 }
