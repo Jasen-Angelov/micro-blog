@@ -1,0 +1,32 @@
+<form  method="POST" href="{{ path_for('admin.blog.update', {'id': blog.id}) }}" enctype="multipart/form-data">
+    <input type="hidden" name="_METHOD" value="PUT"/>
+    <div class="mb-3 mt-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ blog.title }}">
+    </div>
+    <div class="row">
+        <div class="col-5">
+            <div class="mb-3 mt-3">
+                <label for="content">Content:</label>
+                <textarea class="form-control" rows="5" id="content" name="content">{{ blog.content }}</textarea>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="mb-3 mt-3">
+                <div class="uploadOuter">
+                    <label for="uploadFile" class="btn btn-primary">Upload Image</label>
+                    <strong>OR</strong>
+                    <span class="dragBox">Darg and Drop image here<input type="file" onChange="dragNdrop(event)" ondragover="drag()" ondrop="drop()" id="uploadFile" name="blog_image" /></span>
+                </div>
+                <div id="preview">
+                    {% if blog.image %}
+                        <img src="{{ blog.image.path }}" alt="{{ blog.image.name }}">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row mt-5">
+        <button type="submit" class="btn btn-success">Update</button>
+    </div>
+</form>

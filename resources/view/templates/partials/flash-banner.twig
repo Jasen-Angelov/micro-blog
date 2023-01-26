@@ -1,0 +1,7 @@
+{% if (flash.getMessages()) %}
+    {% for name, message in flash.getMessages() %}
+        <div class="alert alert-{{ name }}" role="alert">
+            {{ message.0 }}
+        </div>
+    {% endfor %}
+{% endif %}

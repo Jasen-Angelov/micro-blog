@@ -1,0 +1,28 @@
+<form  method="POST" href="{{ path_for('admin.blog.create') }}" enctype="multipart/form-data">
+    <div class="mb-3 mt-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" value="">
+    </div>
+    <div class="row">
+        <div class="col-5">
+            <div class="mb-3 mt-3">
+                <label for="content">Content:</label>
+                <textarea class="form-control" rows="5" id="content" name="content"></textarea>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="mb-3 mt-3">
+                <div class="uploadOuter">
+                    <label for="uploadFile" class="btn btn-primary">Upload Image</label>
+                    <strong>OR</strong>
+                    <span class="dragBox">Darg and Drop image here<input type="file" onChange="dragNdrop(event)" ondragover="drag()" ondrop="drop()" id="uploadFile" name="blog_image" /></span>
+                </div>
+                <div id="preview">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row mt-5">
+        <button type="submit" class="btn btn-success">Update</button>
+    </div>
+</form>

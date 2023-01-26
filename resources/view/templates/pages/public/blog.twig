@@ -1,0 +1,18 @@
+{% extends "base/base.twig" %}
+{% block content %}
+    <main class="my-5">
+        <div class="container">
+            <section class="text-center">
+                <h4 class="mb-5"><strong>{{ blog.title }}</strong></h4>
+            </section>
+            <section class="text-center">
+                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                    <img src="{{ blog.image.path }}" class="img-fluid" />
+                </div>
+            </section>
+            <section class="text-center">
+                <p class="mt-5">{{ blog.content }}</p>
+            </section>
+        </div>
+    </main>
+{% endblock %}
