@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Middleware;
+namespace App\Middleware;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -17,8 +17,7 @@ class UserAuthentication
     {
         $route = $request->getAttribute('route');
         $routeName = $route->getName();
-
-        if (!isset($_SESSION['USER']) && !in_array($routeName, $this->allowed_routes)) {
+        if (!isset($_SESSION['user']) && !in_array($routeName, $this->allowed_routes)) {
 
             return $response->withRedirect('/login');
         }
