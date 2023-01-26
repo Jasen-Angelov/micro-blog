@@ -6,7 +6,7 @@ return [
 
         // Renderer settings
         'twig' => [
-            'template_path' => dirname(__DIR__, 2) . '/resources/view/templates',
+            'template_path' => APP_ROOT . '/resources/view/templates',
             'settings' => [
                 'cache' => false,
                 'debug' => true,
@@ -18,6 +18,8 @@ return [
             'name' => 'slim-app',
             'path' => APP_ROOT . '/logs/app.log',
         ],
+
+        'upload_directory' => APP_ROOT . '/public/resources/images/',
 
         'db' => [
             'driver' => 'mysql',

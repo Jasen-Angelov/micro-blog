@@ -4,9 +4,6 @@ use App\Helpers\ControllersFactory;
 use App\Helpers\InputValidator;
 use App\Interfaces\Validator;
 use Illuminate\Database\Capsule\Manager;
-use Illuminate\Translation\ArrayLoader;
-use Illuminate\Translation\Translator;
-use Illuminate\Validation\Factory;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 
@@ -22,25 +19,20 @@ $container['logger'] = function ($c) {
     return $logger;
 };
 
+$container['flash'] = function (){
+  return new Slim\Flash\Messages();
+};
+
 $container['view'] = function ($container): Twig {
     $view = new Twig( $container->get('settings')['twig']['template_path'], $container->get('settings')['twig']['settings']);
-
     $view->addExtension(new TwigExtension(
         $container->router,
         $container->request->getUri()
     ));
+    //Adds the flash message bag as global.
+    $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
     return $view;
-};
-
-$container['db'] = function ($container) {
-    $capsule = new Manager;
-    $capsule->addConnection($container['settings']['db']);
-
-    $capsule->setAsGlobal();
-    $capsule->bootEloquent();
-
-    return $capsule;
 };
 
 $container['validator'] = function (): Validator {
@@ -48,7 +40,18 @@ $container['validator'] = function (): Validator {
 };
 
 // Inject controllers callables into the container
-$controllers = ControllersFactory::controllers_lazy_loader($container->get('view'), $container->get('logger'), $container->get('validator'));
+$controllers = ControllersFactory::controllers_lazy_loader(
+    $container->get('view'),
+    $container->get('logger'),
+    $container->get('validator'),
+    $container->get('flash'),
+);
 foreach ($controllers as $controller_tag => $controller_callback) {
     $container[$controller_tag] = $controller_callback;
 }
+
+// Eloquent ORM
+$capsule = new Manager;
+$capsule->addConnection($container['settings']['db']);
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
