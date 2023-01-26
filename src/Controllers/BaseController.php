@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Interfaces\Controller;
 use App\Interfaces\Validator;
 use Monolog\Logger;
+use Slim\Flash\Messages;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Views\Twig;
@@ -17,8 +18,9 @@ abstract class BaseController implements Controller
      * @param Twig $view
      * @param Logger $logger
      * @param Validator $validator
+     * @param Messages $flash
      */
-    public function __construct(protected Twig $view, protected Logger $logger, protected Validator $validator)
+    public function __construct(protected Twig $view, protected Logger $logger, protected Validator $validator, protected Messages $flash)
     {
     }
     /**
@@ -31,6 +33,7 @@ abstract class BaseController implements Controller
      */
     public function __invoke(Request $request, Response $response, array $args = []): Response
     {
+        $this->logger->info("{$request->getMethod()} {$request->getUri()->getPath()} " . $this::class);
         return match ($request->getMethod()) {
             'GET'    => $this->get($request, $response, $args),
             'POST'   => $this->post($request, $response),
