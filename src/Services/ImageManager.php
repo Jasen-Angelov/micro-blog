@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Services;
 
 use App\Models\Image;
 use Slim\Http\UploadedFile;
@@ -11,8 +11,8 @@ class ImageManager
 
    public static function create_image_from_file(UploadedFile $data): Image
    {
-       $path = self::move_uploaded_file($data);
-       $image = new Image();
+       $path        = self::move_uploaded_file($data);
+       $image       = new Image();
        $image->path = $path;
        $image->name = htmlentities($data->getClientFilename());
        $image->save();
@@ -22,8 +22,8 @@ class ImageManager
    private static function move_uploaded_file( UploadedFile $uploadedFile): string
    {
         $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
-        $basename = bin2hex(random_bytes(8));
-        $filename = sprintf('%s.%0.8s', $basename, $extension);
+        $basename  = bin2hex(random_bytes(8));
+        $filename  = sprintf('%s.%0.8s', $basename, $extension);
         $uploadedFile->moveTo(APP_ROOT . self::$directory . $filename);
 
         return self::$directory . $filename;
