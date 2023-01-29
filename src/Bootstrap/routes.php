@@ -6,7 +6,7 @@ use App\Middleware\UserAuthentication as AuthenticationMiddleware;
 
 if (isset($app)) {
     $app->get( '/',            'blog.controller')->setName('home.blogs');
-    $app->get( '/blog/{slug}', 'blog.controller')->setName('home.blog');
+    $app->get( '/blog/{slug}', 'blog.controller')->setName('home.blog')->add(BlogValidator::class);
     $app->any('/login',        'login.controller')->setName('admin.login')->add(LoginValidator::class);
 
     // Administration routes
