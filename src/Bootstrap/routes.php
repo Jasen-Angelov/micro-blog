@@ -14,8 +14,8 @@ if (isset($app)) {
         $this->get('',                     'admin.controller')->setName('admin.dashboard');
         $this->get('/dashboard',           'admin.controller')->setName('admin.dashboard');
         $this->get('/blog/[{id}]',         'admin.blog.controller')->setName('admin.blog.get');
-        $this->put('/blog/[{id}]',         'admin.blog.controller')->setName('admin.blog.update');
-        $this->post('/blog/[{id}]',        'admin.blog.controller')->setName('admin.blog.create');
+        $this->put('/blog/{id}',           'admin.blog.controller')->setName('admin.blog.update');
+        $this->post('/blog',               'admin.blog.controller')->setName('admin.blog.create');
         $this->get('/blog/delete/{id}',    'admin.blog.controller:delete')->setName('admin.blog.delete');
         $this->get('/logout',              'login.controller:delete')->setName('admin.logout');
     })->add(AuthenticationMiddleware::class)->add(BlogValidator::class);

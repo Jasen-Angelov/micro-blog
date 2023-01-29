@@ -91,6 +91,16 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
     }
 
     /**
+     * Add error to error bag.
+     *
+     * @param string $error
+     * @return void
+     */
+    public function add_error(string $error): void
+    {
+        $this->errors[] = $error;
+    }
+    /**
      * Validate the input value against the given pattern.
      *
      * @param string $pattern available patterns
