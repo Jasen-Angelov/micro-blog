@@ -2,9 +2,10 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Services\AuthManager;
+use App\Services\SessionManager;
 use Slim\Http\Request;
 use Slim\Http\Response;
-Use App\Models\User as Admin;
 
 class LogIn extends BaseController
 {
@@ -22,16 +23,10 @@ class LogIn extends BaseController
     public function post(Request $request, Response $response, array $args = []): Response
     {
         $data = $request->getParsedBody();
-        $this->validator->name('email')->value($data['email'])->is_email();
-        $this->validator->name('password')->value($data['password'])->pattern('alphanumeric')->is_required();
-        if ($this->validator->is_valid()) {
-            $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
-            $password = $data['password'];
-            $user = Admin::where('email', $email)->first();
-            if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['user'] = $user;
-                return $response->withRedirect('/admin/dashboard');
-            }
+
+        if ($request->getAttribute('validation_success') && AuthManager::login_user($data['email'], $data['password'])) {
+
+          return $response->withRedirect('/admin/dashboard');
         }
 
         return $this->view->render($response, 'pages/public/login.twig', [
@@ -53,7 +48,9 @@ class LogIn extends BaseController
      */
     public function delete(Request $request, Response $response, array $args = []): Response
     {
-        unset($_SESSION['user']);
+        AuthManager::logout_current_user();
+        SessionManager::destroy_session();
+
         return $response->withRedirect('/login');
     }
 }
