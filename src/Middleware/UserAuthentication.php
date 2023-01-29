@@ -2,6 +2,7 @@
 
 namespace App\Middleware;
 
+use App\Services\AuthenticationManager;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -17,7 +18,7 @@ class UserAuthentication
     {
         $route = $request->getAttribute('route');
         $routeName = $route->getName();
-        if (!isset($_SESSION['user']) && !in_array($routeName, $this->allowed_routes)) {
+        if (!AuthenticationManager::is_authenticated() && !in_array($routeName, $this->allowed_routes)) {
 
             return $response->withRedirect('/login');
         }
