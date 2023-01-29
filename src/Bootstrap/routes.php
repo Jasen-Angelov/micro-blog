@@ -1,13 +1,13 @@
 <?php
 
 use App\Middleware\BlogValidator;
+use App\Middleware\LoginValidator;
 use App\Middleware\UserAuthentication as AuthenticationMiddleware;
 
 if (isset($app)) {
     $app->get( '/',            'blog.controller')->setName('home.blogs');
     $app->get( '/blog/{slug}', 'blog.controller')->setName('home.blog');
-    $app->any('/login',        'login.controller')->setName('admin.login');
-    $app->any('/register',     'rgstr.controller')->setName('admin.register');
+    $app->any('/login',        'login.controller')->setName('admin.login')->add(LoginValidator::class);
 
     // Administration routes
     $app->group('/admin', function () use ($app) {
