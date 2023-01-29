@@ -3,9 +3,10 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Helpers\ImageManager;
 use App\Models\Blog as BlogPost;
+use App\Services\AuthManager;
 use App\Services\BlogManager;
+use App\Services\ImageManager;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -18,8 +19,9 @@ class Blog extends BaseController
     public function get(Request $request, Response $response, array $args = []): Response
     {
         $blog = null;
+
         if ($request->getAttribute('validation_success')) {
-            $blog = BlogPost::where('id', $args['id'])->where('user_id', $_SESSION['user']['id'])->first();
+            $blog = BlogPost::where('id', $args['id'])->where('user_id', AuthManager::get_authenticated_user_id())->first();
         }
 
         return $this->view->render($response, '/pages/admin/edit-blog.twig', ['blog' => $blog]);
@@ -37,7 +39,7 @@ class Blog extends BaseController
             $data = [
                 'title' => htmlentities($data['title']),
                 'content' => htmlentities($data['content']),
-                'user_id' => $_SESSION['user']['id'],
+                'user_id' => AuthManager::get_authenticated_user_id(),
             ];
             if (BlogManager::upsert_blog($data, ['image' => $image])) {
                 $this->flash->addMessage('success', "Blog successfully created!");
@@ -74,7 +76,7 @@ class Blog extends BaseController
             return $response->withRedirect($request->getUri());
         }
 
-        $blog = BlogPost::where('id', $args['id'])->where('user_id', $_SESSION['user']['id'])->first();
+        $blog = BlogPost::where('id', $args['id'])->where('user_id', AuthManager::get_authenticated_user_id())->first();
 
         if ($blog) {
             if ($file->file) {
@@ -85,7 +87,7 @@ class Blog extends BaseController
             $data = [
                 'title' => htmlentities($data['title']),
                 'content' => htmlentities($data['content']),
-                'user_id' => $_SESSION['user']['id'],
+                'user_id' => AuthManager::get_authenticated_user_id(),
             ];
 
             $result = BlogManager::upsert_blog($data);
@@ -103,14 +105,10 @@ class Blog extends BaseController
      */
     public function delete(Request $request, Response $response, array $args = []): Response
     {
-        $this->validator->name('id')->value($args['id'])->is_int();
-        if ($this->validator->is_valid() && $blog = BlogPost::where('id', $args['id'])->where('user_id', $_SESSION['user']['id'])) {
-            $blog->delete();
+        if ($request->getAttribute('validation_success') && BlogManager::delete_blog($args['id'])) {
             $this->flash->addMessage('success', "Blog successfully deleted!");
         } else {
-            foreach ($this->validator->get_errors() as $error) {
-                $this->flash->addMessage('danger', $error);
-            }
+            $this->flash->addMessage('danger', "Blog could not be deleted!");
         }
 
         return $response->withRedirect('/admin/dashboard');

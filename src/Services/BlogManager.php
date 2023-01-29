@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Blog;
 use Illuminate\Database\Eloquent\Model;
-use Monolog\Logger;
 
 class BlogManager
 {
@@ -55,6 +54,15 @@ class BlogManager
         }
 
         return $text;
+    }
+
+    public static function delete_blog(int $blog_id):bool
+    {
+        $blog = Blog::where('id', $blog_id)->where('user_id', AuthManager::get_authenticated_user_id())->first();
+        if ($blog){
+            return $blog->delete();
+        }
+        return false;
     }
 
 }
