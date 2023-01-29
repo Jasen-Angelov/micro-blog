@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Controllers\Admin\Admin;
+use App\Models\User;
 
-class AuthenticationManager
+class AuthManager
 {
     public static function is_authenticated(): bool
     {
@@ -34,9 +34,9 @@ class AuthenticationManager
     public static function login_user(string $email, string $password): bool
     {
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-        $user = Admin::where('email', $email)->first();
+        $user = User::where('email', $email)->first();
         if ($user && password_verify($password, $user['password'])) {
-            self::authenticate_user($user);
+            self::authenticate_user($user->toArray());
 
             return true;
         }

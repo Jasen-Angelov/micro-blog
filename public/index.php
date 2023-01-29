@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\SessionManager;
 use Slim\App;
 define('APP_ROOT', dirname(__DIR__));
 
@@ -14,7 +15,7 @@ if (PHP_SAPI == 'cli-server') {
 
 require APP_ROOT . '/vendor/autoload.php';
 
-session_start();
+SessionManager::start_session();
 
 // Instantiate the app
 $settings = require APP_ROOT . '/src/Bootstrap/settings.php';
