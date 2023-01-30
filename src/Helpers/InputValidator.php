@@ -131,8 +131,7 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
      */
     public function preg_match(string $pattern): InputValidator
     {
-        $regex = '/^(' . $pattern . ')$/u';
-        if ( !empty($this->input_value) && !preg_match($regex, $this->input_value)) {
+        if ( !empty($this->input_value) && !preg_match($pattern, $this->input_value)) {
             $this->errors[] = "$this->input_name input data, is not valid!";
         }
 
@@ -146,7 +145,7 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
      */
     public function is_required(): InputValidator
     {
-        if ((isset($this->file) && $this->file->getError() !== 0) || empty($this->input_value)) {
+        if (empty($this->input_value)) {
             $this->errors[] = "$this->input_name input is required!";
         }
 
@@ -161,7 +160,7 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
     public function file_required(): InputValidator
     {
 
-        if ((isset($this->file) && $this->file->getError() !== 0)) {
+        if ((isset($this->file) && $this->file->getError() !== UPLOAD_ERR_OK)) {
 
             $this->errors[] = "$this->input_name is required!";
         }
@@ -185,7 +184,7 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
             return $this;
         }
 
-        if (false === $this->compare_integers($count, $length, '>')) {
+        if (false === $this->compare_integers($count, $length, '>=')) {
             $this->errors[] = "$this->input_name input is too short!";
         }
 
@@ -201,14 +200,13 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
     public function max_length(int $length):InputValidator
     {
         $count = $this->get_count_value($this->input_value);
-
         if (false === $count){
             $this->errors[] = "$this->input_name input data cant be validated with max operator!";
 
             return $this;
         }
 
-        if (false === $this->compare_integers($count, $length, '<')) {
+        if (false === $this->compare_integers($count, $length, '<=')) {
             $this->errors[] = "$this->input_name input is too long!";
         }
 
@@ -239,7 +237,7 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
     public function file_max_size(int $max_size): InputValidator
     {
         $size_in_bites = $max_size * 1024 * 1024;
-        if (isset($this->file) && $this->file->getError() !== 4) {
+        if (isset($this->file) && $this->file->getError() === UPLOAD_ERR_OK) {
             if ($this->file->getSize() > $size_in_bites) {
                 $this->errors[] = "$this->input_name file is too big!";
             }
@@ -256,9 +254,8 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
      */
     public function file_is_type( string $type): InputValidator
     {
-        if (isset($this->file) && $this->file->getError() !== 4) {
-            $file_ext = pathinfo($this->file->getClientFilename(), PATHINFO_EXTENSION);
-            if ($file_ext !== $type) {
+        if (isset($this->file) && $this->file->getError() === UPLOAD_ERR_OK) {
+            if ($this->file->getClientMediaType() !== $type) {
                 $this->errors[] = "$this->input_name file extension is not valid!";
             }
         }
@@ -329,20 +326,6 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
     }
 
     /**
-     * Validate if value is boolean.
-     *
-     * @return InputValidator
-     */
-    public function is_bool(): InputValidator
-    {
-        if (false === filter_var($this->input_value, FILTER_VALIDATE_BOOLEAN)){
-            $this->errors[] = "$this->input_name input data is not a boolean!";
-        }
-
-        return $this;
-    }
-
-    /**
      * Validate if input value is a valid email.
      *
      * @return InputValidator
@@ -361,9 +344,14 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
      */
     public function is_image(): InputValidator
     {
-        if (isset($this->file) && $this->file->getError() !== 4) {
-            $file_ext = pathinfo($this->file->getClientFilename(), PATHINFO_EXTENSION);
-            if (!in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif'])) {
+        $image_types = [
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+        ];
+        if (isset($this->file) && $this->file->getError() === UPLOAD_ERR_OK) {
+            if (!in_array($this->file->getClientMediaType(), $image_types)) {
                 $this->errors[] = "$this->input_name file is not an image!";
             }
         }
@@ -388,7 +376,7 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
     private function get_count_value(mixed $value): int | false
     {
         return match (gettype($value)) {
-            'string'  => strlen($value),
+            'string'  => mb_strlen($value),
             'integer' => $value,
             'array'   => count($value),
             default   => false,

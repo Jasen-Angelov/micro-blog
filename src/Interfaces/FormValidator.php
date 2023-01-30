@@ -16,8 +16,6 @@ interface FormValidator extends Validator
 
     public function is_url(): FormValidator;
 
-    public function is_bool(): FormValidator;
-
     public function is_int(): FormValidator;
 
     public function is_float(): FormValidator;

@@ -20,7 +20,8 @@
         "doctrine/dbal": "^3.5",
         "fakerphp/faker": "^1.21",
         "slim/flash": "^0.4.0",
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+        "brain/monkey": "^2.6"
     },
     "config": {
         "allow-plugins": {
@@ -35,6 +36,9 @@
     "ext-require": {
         "pdo": "*",
         "pdo_mysql": "*"
+    },
+    "scripts": {
+        "test:php": "phpunit --configuration ./phpunit.xml.dist"
     },
     "minimum-stability": "stable"
 }
