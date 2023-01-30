@@ -16,11 +16,8 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
      */
     public array $patterns = array(
         'alpha' => '[\p{L}]+',
-        'words' => '[\p{L}\s]+',
         'alphanumeric' => '[\p{L}0-9]+',
         'slug' => '^[a-z0-9]+(?:-[a-z0-9]+)*$',
-        'tel' => '[0-9+\s()-]+',
-        'text' => '[\p{L}0-9\s-.,;:!"%&()?+\'°#\/@]+',
     );
 
     /**
