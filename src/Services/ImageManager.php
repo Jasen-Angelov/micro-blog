@@ -31,9 +31,10 @@ class ImageManager
 
     public static function delete_existing_images( Image $image): bool
     {
-        if (file_exists($image->path)){
 
-            return unlink($image->path);
+        if (file_exists(APP_ROOT . $image->path)){
+
+            return unlink(APP_ROOT . $image->path);
         }
 
         return $image->delete();

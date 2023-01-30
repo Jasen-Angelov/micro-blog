@@ -31,8 +31,11 @@ class BlogValidator extends RequestValidator
               default   =>  $this->validator->add_error("Unhandled POST parameter with name: {$name}"),
             };
         }
-        if ($request->getUploadedFiles()){
-            self::validate_file($request->getUploadedFiles());
+
+        if ($file = $request->getUploadedFiles()['blog_image'] ?? false){
+            $this->validator->name('Image')->file($file)->is_image()->file_required();
+        }else{
+            $this->validator->add_error('No file was uploaded!');
         }
 
     }
@@ -51,8 +54,9 @@ class BlogValidator extends RequestValidator
                 default   =>  $this->validator->add_error("Unhandled PUT parameter with name: {$name}"),
             };
         }
-        if ($request->getUploadedFiles()){
-            self::validate_file($request->getUploadedFiles());
+
+        if ($file = $request->getUploadedFiles()['blog_image'] ?? false){
+            $this->validator->name('Image')->file($file)->is_image();
         }
     }
 
@@ -66,12 +70,6 @@ class BlogValidator extends RequestValidator
                 'id'      =>  $this->validator->name($name)->value($value)->is_int()->is_required(),
                 default   =>  $this->validator->add_error("Unhandled DELETE parameter with name: {$name}"),
             };
-        }
-    }
-    private function validate_file(iterable $uploaded_files): void
-    {
-        foreach ($uploaded_files as $key => $file){
-            $this->validator->name($key)->value($file)->is_image();
         }
     }
 

@@ -7,19 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlogManager
 {
-    public static function upsert_blog(iterable $data, iterable $resource = [], Blog $blog = null ):bool
+    public static function upsert_blog(iterable $data, Blog $blog = null ):bool
     {
         $blog = $blog ?? new Blog();
         foreach ($data as $key => $val){
-            $blog->$key = $val;
+            $blog->setAttribute($key, $val);
         }
         if (empty($blog->slug)){
             $blog->slug = self::create_unique_slug($blog->title);
-        }
-        foreach ($resource as $name => $value){
-           if ($value instanceof Model && method_exists($blog, $name)){
-              $blog->$name->save($value);
-           }
         }
 
         return $blog->save();

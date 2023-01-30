@@ -34,14 +34,16 @@ class Blog extends BaseController
     {
         $data = $request->getParams();
         $file = $request->getUploadedFiles()['blog_image'];
+
         if ($request->getAttribute('validation_success')) {
             $image = ImageManager::create_image_from_file($file);
             $data = [
-                'title' => htmlentities($data['title']),
-                'content' => htmlentities($data['content']),
-                'user_id' => AuthManager::get_authenticated_user_id(),
+                'title'    => htmlentities($data['title']),
+                'content'  => htmlentities($data['content']),
+                'user_id'  => AuthManager::get_authenticated_user_id(),
+                'image_id' => $image->id,
             ];
-            if (BlogManager::upsert_blog($data, ['image' => $image])) {
+            if (BlogManager::upsert_blog($data)) {
                 $this->flash->addMessage('success', "Blog successfully created!");
             } else {
                 ImageManager::delete_existing_images($image);
@@ -72,25 +74,25 @@ class Blog extends BaseController
             foreach ($request->getAttribute('validation_errors') as $error) {
                 $this->flash->addMessage($msg_type, $error);
             }
-
             return $response->withRedirect($request->getUri());
         }
 
         $blog = BlogPost::where('id', $args['id'])->where('user_id', AuthManager::get_authenticated_user_id())->first();
 
         if ($blog) {
+            $image = null;
             if ($file->file) {
                 $image = ImageManager::create_image_from_file($file);
                 ImageManager::delete_existing_images($blog->image);
-                $blog->image()->save($image);
             }
             $data = [
                 'title' => htmlentities($data['title']),
                 'content' => htmlentities($data['content']),
                 'user_id' => AuthManager::get_authenticated_user_id(),
+                'image_id' => $image->id ?? $blog->image_id
             ];
 
-            $result = BlogManager::upsert_blog($data);
+            $result = BlogManager::upsert_blog($data, $blog);
             $msg_type = $result ? 'success' : 'danger';
             $msg = $result ? 'Blog successfully updated!' : 'Blog failed to be updated!';
         }

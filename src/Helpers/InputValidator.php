@@ -149,8 +149,24 @@ class InputValidator implements FormValidator, ErrorBag, ImageValidator
      */
     public function is_required(): InputValidator
     {
-        if ((isset($this->file) && $this->file->getError() !== 4) || empty($this->input_value)) {
+        if ((isset($this->file) && $this->file->getError() !== 0) || empty($this->input_value)) {
             $this->errors[] = "$this->input_name input is required!";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Input data is required
+     *
+     * @return InputValidator
+     */
+    public function file_required(): InputValidator
+    {
+
+        if ((isset($this->file) && $this->file->getError() !== 0)) {
+
+            $this->errors[] = "$this->input_name is required!";
         }
 
         return $this;
