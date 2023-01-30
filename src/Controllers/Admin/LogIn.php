@@ -24,7 +24,7 @@ class LogIn extends BaseController
     {
         $data = $request->getParsedBody();
 
-        if ($request->getAttribute('validation_success') && AuthManager::login_user($data['email'], $data['password'])) {
+        if ($request->getAttribute('validation_success') && AuthManager::authenticate_user($data['email'], $data['password'])) {
 
           return $response->withRedirect('/admin/dashboard');
         }

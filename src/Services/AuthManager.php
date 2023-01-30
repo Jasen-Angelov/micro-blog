@@ -21,7 +21,7 @@ class AuthManager
         return SessionManager::get_session('user')['id'];
     }
 
-    public static function authenticate_user(array $user): void
+    public static function login_user(array $user): void
     {
         SessionManager::set_session('user', $user);
     }
@@ -31,12 +31,12 @@ class AuthManager
         SessionManager::unset_session('user');
     }
 
-    public static function login_user(string $email, string $password): bool
+    public static function authenticate_user(string $email, string $password): bool
     {
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
         $user = User::where('email', $email)->first();
         if ($user && password_verify($password, $user['password'])) {
-            self::authenticate_user($user->toArray());
+            self::login_user($user->toArray());
 
             return true;
         }
