@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\SessionManager;
+use Dotenv\Dotenv;
 use Slim\App;
 define('APP_ROOT', dirname(__DIR__));
 
@@ -14,6 +15,11 @@ if (PHP_SAPI == 'cli-server') {
 }
 
 require APP_ROOT . '/vendor/autoload.php';
+
+if (file_exists(APP_ROOT . '/.env')) {
+    $dotenv = Dotenv::createImmutable(APP_ROOT );
+    $dotenv->load();
+}
 
 SessionManager::start_session();
 

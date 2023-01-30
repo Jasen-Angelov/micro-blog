@@ -1,15 +1,15 @@
 <?php
 return [
     'settings' => [
-        'displayErrorDetails' => true,
+        'displayErrorDetails' => $_ENV['APP_DEBUG'] ?? false, // set to false in production,
         'determineRouteBeforeAppMiddleware' => true,
 
         // Renderer settings
         'twig' => [
             'template_path' => APP_ROOT . '/resources/view/templates',
             'settings' => [
-                'cache' => false,
-                'debug' => true,
+                'cache' => $_ENV['APP_CACHE'] ?? false,
+                'debug' => $_ENV['APP_DEBUG'] ?? false,
             ],
         ],
 
@@ -22,14 +22,14 @@ return [
         'upload_directory' => APP_ROOT . '/public/resources/images/',
 
         'db' => [
-            'driver' => 'mysql',
-            'host' => 'localhost',
-            'database' => 'micro_blog',
-            'username' => 'root',
-            'password' => 'root',
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
+            'driver'    => $_ENV['DB_DRIVER'] ?? '',
+            'host'      => $_ENV['DB_HOST'] ?? '',
+            'database'  => $_ENV['DB_NAME'] ?? '',
+            'username'  => $_ENV['DB_USER'] ?? '',
+            'password'  => $_ENV['DB_PASSWORD'] ?? '',
+            'charset'   => $_ENV['DB_CHARSET'] ?? '',
+            'collation' => $_ENV['DB_COLLATION'] ?? '',
+            'prefix'    => $_ENV['DB_PREFIX'] ?? '',
         ],
     ],
 ];

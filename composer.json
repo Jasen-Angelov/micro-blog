@@ -1,14 +1,12 @@
 {
-    "name": "slim/slim-skeleton",
+    "name": "jasen-san/micro-blog",
     "description": "A Slim Framework skeleton application for rapid development",
     "keywords": ["microframework","rest","router", "psr7"],
-    "homepage": "http://github.com/slimphp/Slim-Skeleton",
     "license": "MIT",
     "authors": [
         {
-            "name": "Josh Lockhart",
-            "email": "info@joshlockhart.com",
-            "homepage": "http://www.joshlockhart.com/"
+            "name": "Yasen Angelov",
+            "email": "jasen_angelov@abv.bg"
         }
     ],
     "require": {
@@ -21,7 +19,8 @@
         "slim/twig-view": "~2.1",
         "doctrine/dbal": "^3.5",
         "fakerphp/faker": "^1.21",
-        "slim/flash": "^0.4.0"
+        "slim/flash": "^0.4.0",
+        "vlucas/phpdotenv": "^5.5"
     },
     "config": {
         "allow-plugins": {
