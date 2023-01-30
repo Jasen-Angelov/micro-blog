@@ -5,8 +5,6 @@ namespace App\Helpers;
 use App\Controllers\Admin\Admin;
 use App\Controllers\Admin\LogIn;
 use App\Controllers\Admin\Blog as BlogEdit;
-use App\Controllers\Admin\Registration;
-use App\Controllers\Admin\User;
 use App\Controllers\BaseController;
 use App\Controllers\Public\Blog;
 use App\Interfaces\Validator;
@@ -19,10 +17,8 @@ class ControllersFactory
     private static array $controllers = [
         'blog.controller'       => Blog::class,
         'login.controller'      => LogIn::class,
-        'rgstr.controller'      => Registration::class,
         'admin.controller'      => Admin::class,
         'admin.blog.controller' => BlogEdit::class,
-        'user.controller'       => User::class
     ];
 
     public static function controllers_lazy_loader(Twig $view, Logger $logger, Validator $validator, Messages $flash_message): array
