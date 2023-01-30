@@ -11,6 +11,10 @@ class BlogValidator extends RequestValidator
     {
         $route = $request->getAttribute('route');
         $arg   = $route->getArguments();
+        $required = ['id', 'slug'];
+        if (count(array_diff($required, array_keys($arg))) > 1){
+            $this->validator->add_error('Missing required URL parameters!');
+        }
         foreach ($arg as $name => $value){
             match ($name){
                 'id'      =>  $this->validator->name($name)->value($value)->is_int()->is_required(),
@@ -24,6 +28,10 @@ class BlogValidator extends RequestValidator
     protected final function validate_post(Request $request): void
     {
         $params = $request->getParams();
+        $required = ['title', 'content'];
+        if (count(array_diff($required, array_keys($params))) > 0){
+            $this->validator->add_error('Missing required parameters!');
+        }
         foreach ($params as $name => $value){
             match ($name){
               'title' =>  $this->validator->name($name)->value($value)->max_length(255)->is_required(),
@@ -45,6 +53,10 @@ class BlogValidator extends RequestValidator
         $route = $request->getAttribute('route');
         $params = $request->getParams();
         $params = array_merge($params, $route->getArguments());
+        $required = ['id', 'title', 'content', '_METHOD'];
+        if (count(array_diff($required, array_keys($params))) > 0){
+            $this->validator->add_error('Missing required parameters!');
+        }
         foreach ($params as $name => $value){
             match ($name){
                 'id'      =>  $this->validator->name($name)->value($value)->is_int()->is_required(),
@@ -64,7 +76,10 @@ class BlogValidator extends RequestValidator
     {
         $route = $request->getAttribute('route');
         $arg   = $route->getArguments();
-
+        $required = ['id'];
+        if (count(array_diff($required, array_keys($arg))) > 0){
+            $this->validator->add_error('Missing required parameters!');
+        }
         foreach ($arg as $name => $value){
             match ($name){
                 'id'      =>  $this->validator->name($name)->value($value)->is_int()->is_required(),
