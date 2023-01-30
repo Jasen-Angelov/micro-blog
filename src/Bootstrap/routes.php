@@ -11,7 +11,6 @@ if (isset($app)) {
 
     // Administration routes
     $app->group('/admin', function () use ($app) {
-        $this->get('',                     'admin.controller')->setName('admin.dashboard');
         $this->get('/dashboard',           'admin.controller')->setName('admin.dashboard');
         $this->get('/blog/[{id}]',         'admin.blog.controller')->setName('admin.blog.get');
         $this->put('/blog/{id}',           'admin.blog.controller')->setName('admin.blog.update');

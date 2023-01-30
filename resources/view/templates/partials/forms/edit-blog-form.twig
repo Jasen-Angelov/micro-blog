@@ -1,4 +1,4 @@
-<form  method="POST" href="{{ path_for('admin.blog.update', {'id': blog.id}) }}" enctype="multipart/form-data">
+<form  method="POST" action="{{ path_for('admin.blog.update', {'id': blog.id}) }}" enctype="multipart/form-data">
     <input type="hidden" name="_METHOD" value="PUT"/>
     <div class="mb-3 mt-3">
         <label for="title" class="form-label">Title:</label>
