@@ -1,7 +1,6 @@
 {
     "name": "jasen-san/micro-blog",
     "description": "A Slim Framework skeleton application for rapid development",
-    "keywords": ["microframework","rest","router", "psr7"],
     "license": "MIT",
     "authors": [
         {
@@ -20,8 +19,7 @@
         "doctrine/dbal": "^3.5",
         "fakerphp/faker": "^1.21",
         "slim/flash": "^0.4.0",
-        "vlucas/phpdotenv": "^5.5",
-        "brain/monkey": "^2.6"
+        "vlucas/phpdotenv": "^5.5"
     },
     "config": {
         "allow-plugins": {
@@ -38,7 +36,7 @@
         "pdo_mysql": "*"
     },
     "scripts": {
-        "test:php": "phpunit --configuration ./phpunit.xml.dist"
+        "test:php": "phpunit --configuration phpunit.xml"
     },
     "minimum-stability": "stable"
 }
