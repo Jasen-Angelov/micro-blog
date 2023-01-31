@@ -4,3 +4,4 @@
 .env
 /public/resources/images/*
 /.phpunit.result.cache
+

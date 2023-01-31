@@ -1,18 +1,22 @@
-# Slim Framework 3 Skeleton Application
+# Micro blog by Yasen Angelov
 
-Use this skeleton application to quickly setup and start working on a new Slim Framework 3 application. This application uses the latest Slim 3 with the PHP-View template renderer. It also uses the Monolog logger.
-
-This skeleton application was built for Composer. This makes setting up a new Slim Framework application quick and easy.
+This is a simple demonstration of a micro-blog application using Slim Framework 3. 
 
 ## Install the Application
 
-Run this command from the directory in which you want to install your new Slim Framework application.
+After you clone the repository, run `composer install` to install all required dependencies.
+Make sure that your system matches all requirements for the project.
 
-    php composer.phar create-project slim/slim-skeleton [my-app-name]
+## Run the Application
 
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
+* Copy `.env.example` to `.env` and set your database credentials
+* Run this command from the project root: `composer run serve`  
+* This will start a default PHP server on port 8080. You can now access the application in your browser at the following URL: http://localhost:8080
 
-* Point your virtual host document root to your new application's `public/` directory.
-* Ensure `logs/` is web writeable.
+## Database
 
-That's it! Now go build something cool.
+* In order to create the necessary tables, run this command from the project root: `composer run db:create`
+* In order to seed the database with some dummy data, run this command from the project root: `composer run db:seed` the default user email is `admin@admin.bg` with password `password`
+
+## Tests
+* In order to run the tests, run this command from the project root: `composer run test:php`

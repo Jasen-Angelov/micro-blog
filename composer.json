@@ -32,11 +32,24 @@
         }
     },
     "ext-require": {
-        "pdo": "*",
-        "pdo_mysql": "*"
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-dom": "20031129",
+        "ext-json": "^8.0",
+        "ext-mbstring": "*",
+        "ext-xml": "^8.0",
+        "ext-libxml": "^8.0",
+        "ext-xmlwriter": "^8.0",
+        "ext-pcre": "^8.0",
+        "ext-tokenizer": "^8.0",
+        "ext-simplexml": "^8.0",
+        "ext-phar": "^8.0"
     },
     "scripts": {
-        "test:php": "phpunit --configuration phpunit.xml"
+        "test:php": "phpunit --configuration phpunit.xml",
+        "serve": "php -S localhost:8080 -t public public/index.php",
+        "db:create": "php ./database/migration/migrate.php",
+        "db:seed": "php ./database/seed/seed.php"
     },
     "minimum-stability": "stable"
 }
